@@ -1,0 +1,85 @@
+#modal1 {
+    display: none;
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    gap: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    .form-header {
+        display: flex;
+        background-color: coral;
+        justify-content: center;
+    }
+
+    .form-button {
+        display: flex;
+        background-color: coral;
+        justify-content: center;
+        margin: 0px 40px;
+    }
+}
+
+#form input:not([type="checkbox"]) {
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 30px;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    position: relative;
+    padding: 0px 40px;
+
+    .check-icon {
+        position: absolute;
+        right: 0px;
+        padding: 30px 12px;
+        pointer-events: none;
+        color: green;
+        display: none;
+    }
+}
+
+.right-inner-addon input {
+    padding-right: 35px !important;
+}
+
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 12px 12px;
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
