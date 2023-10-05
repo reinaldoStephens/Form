@@ -1,41 +1,42 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-    document.getElementById('showPassword').onclick = function () {
+    document.getElementById("showPassword").onclick = function () {
         if (this.checked) {
-            document.getElementById('password').type = "text";
+            document.getElementById("password").type = "text";
         } else {
-            document.getElementById('password').type = "password";
+            document.getElementById("password").type = "password";
         }
     };
-
-    const usernameInput = document.getElementById("username");
-
-    usernameInput.onkeydown = (e) => {
-        if (e.code == "Space")
-            e.preventDefault();
-
-        usernameInput.value = usernameInput.value?.trim()
-    }
-
-    const passwordElem = document.getElementById("password");
-    passwordElem?.addEventListener('blur', passwordValidation);
-    const passwordConfirmElem = document.getElementById("passwordConfirm");
-    passwordConfirmElem?.addEventListener('blur', passwordConfirmValidation);
-    const formElem = document.getElementById("testForm");
-    formElem?.addEventListener('submit', formSubmitValidation);
+    // username
     const usernameElem = document.getElementById("username");
-    usernameElem?.addEventListener('blur', validateForm);
+    usernameElem?.addEventListener("blur", () => usernameValidation(usernameElem, 6, 18));
+    avoidSpaces(usernameElem);
+    usernameElem?.addEventListener("blur", validateForm);
+    // password
+    const passwordElem = document.getElementById("password");
+    passwordElem?.addEventListener("blur", () => passwordValidation(passwordElem, 8, 16));
+    avoidSpaces(passwordElem);
+    // password confirmation
+    const passwordConfirmElem = document.getElementById("passwordConfirm");
+    passwordConfirmElem?.addEventListener("blur", passwordConfirmValidation);
+    const formElem = document.getElementById("testForm");
+    formElem?.addEventListener("submit", formSubmitValidation);
+
     const emailElem = document.getElementById("email");
-    emailElem?.addEventListener('blur', validateForm);
+    emailElem?.addEventListener("blur", validateForm);
 });
 
-
+function avoidSpaces(pInputElem) {
+    pInputElem.onkeydown = (e) => {
+        if (e.code == "Space") e.preventDefault();
+        pInputElem.value = pInputElem.value?.trim();
+    };
+}
 
 function passwordValidationRegex(inputTextVal) {
     let regexPattern = /^(?=.*[-\#\$\.\%\&\@\!\+\=\\*])(?=.*[a-zA-Z])(?=.*\d).{8,16}$/;
     if (inputTextVal.match(regexPattern)) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -45,69 +46,104 @@ function setErrorMsj(pElem) {
     removeValidClass(pElem);
 }
 
-function removeErrorMsj(pElem) {
-    addValidClass(pElem);
-    removeInvalidClass(pElem);
-}
-
 function addValidClass(pElem) {
-    if (!pElem.classList.contains("valid"))
-        pElem.classList.add("valid");
+    if (!pElem.classList.contains("valid")) pElem.classList.add("valid");
 }
 
 function removeValidClass(pElem) {
-    if (pElem.classList.contains("valid"))
-        pElem.classList.remove("valid");
+    if (pElem.classList.contains("valid")) pElem.classList.remove("valid");
 }
 
 function addInvalidClass(pElem) {
-    if (!pElem.classList.contains("invalid"))
-        pElem.classList.add("invalid");
+    if (!pElem.classList.contains("invalid")) pElem.classList.add("invalid");
 }
 
 function removeInvalidClass(pElem) {
-    if (pElem.classList.contains("invalid"))
-        pElem.classList.remove("invalid");
+    if (pElem.classList.contains("invalid")) pElem.classList.remove("invalid");
 }
 
-function passwordValidation() {
-    let pElem = document.getElementById("password");
-    let passwordValue = pElem.value;
-    let passwordHelpMessage = "";
-    let passHelpMsjElem = document.getElementById("passwordHelpMsj");
-    let minNumberofChars = 8;
-    let maxNumberofChars = 16;
+function inputFieldLengthValidation(pElem, pInputName, pMinNumberofChars, pMaxNumberofChars) {
+    let inputValue = pElem.value;
+    let helpMessage = "";
+    if (inputValue.length < pMinNumberofChars || inputValue.length > pMaxNumberofChars) {
+        // Error
+        helpMessage = `${
+            pInputName ? pInputName : "Length"
+        } must be between ${pMinNumberofChars} and ${pMaxNumberofChars} characters long`;
+    }
 
-    if (passwordValue) {
-        if (passwordValue.length < minNumberofChars || passwordValue.length > maxNumberofChars) {
-            // Error
-            setErrorMsj(pElem)
-            passwordHelpMessage = "Password must be between 8 and 16 characters long"
-        } else {
+    return helpMessage;
+}
+
+function removeErrorMsj(pHelpMsjElem) {
+    pHelpMsjElem?.setAttribute("data-error", "false");
+    let icon = pHelpMsjElem.parentElement.querySelector(".check-icon");
+    if (icon) {
+        icon.style.display = "flex";
+    }
+}
+
+function setHelpMessage(pHelpMessage, pHelpMsjElem) {
+    if (pHelpMessage) {
+        if (pHelpMsjElem) {
+            pHelpMsjElem.setAttribute("data-error", "true");
+            pHelpMsjElem.innerHTML = pHelpMessage;
+
+            let icon = pHelpMsjElem.parentElement.querySelector(".check-icon");
+            if (icon) {
+                icon.style.display = "none";
+            }
+        }
+    }
+}
+
+function usernameValidation(pElem, pMinNumberofChars, pMaxNumberofChars) {
+    let inputValue = pElem.value;
+    let helpMessage = "";
+    let helpMsjElem = document.getElementById("username-help-text");
+
+    if (inputValue) {
+        helpMessage = inputFieldLengthValidation(pElem, "Username", pMinNumberofChars, pMaxNumberofChars);
+        if (!helpMessage) {
+            removeErrorMsj(helpMsjElem);
+        }
+    } else {
+        // Error
+        helpMessage = "Username cannot be blank";
+    }
+
+    setHelpMessage(helpMessage, helpMsjElem);
+
+    //validateForm();
+}
+
+function passwordValidation(pElem, pMinNumberofChars, pMaxNumberofChars) {
+    let inputValue = pElem.value;
+    let passwordHelpMessage = "";
+    let helpMsjElem = document.getElementById("password-help-text");
+
+    if (inputValue) {
+        passwordHelpMessage = inputFieldLengthValidation(pElem, "Password", pMinNumberofChars, pMaxNumberofChars);
+        if (!passwordHelpMessage) {
             // Sucess
-            removeErrorMsj(pElem)
-            if (!passwordValidationRegex(passwordValue)) {
+            removeErrorMsj(helpMsjElem);
+            if (!passwordValidationRegex(inputValue)) {
                 // Error
-                setErrorMsj(pElem)
-                passwordHelpMessage = "Password should contain at least one number and one special character"
+                passwordHelpMessage = `Password must contain at least one number and one special character`;
             } else {
                 // Sucess
-                removeErrorMsj(pElem)
-
+                removeErrorMsj(helpMsjElem);
             }
         }
     } else {
         // Error
-        setErrorMsj(pElem)
-        passwordHelpMessage = "Password cannot be blank"
-
+        passwordHelpMessage = "Password cannot be blank";
     }
-    passHelpMsjElem?.setAttribute("data-error", passwordHelpMessage)
 
-    validateForm();
+    setHelpMessage(passwordHelpMessage, helpMsjElem);
 
+    //validateForm();
 }
-
 
 function passwordConfirmValidation() {
     let pConfirmElem = document.getElementById("passwordConfirm");
@@ -119,29 +155,26 @@ function passwordConfirmValidation() {
         if (passwordConfirmValue) {
             if (passwordElem.value != passwordConfirmValue) {
                 // Error
-                setErrorMsj(pConfirmElem)
-                passwordHelpMessage = "Passwords don't match"
+                setErrorMsj(pConfirmElem);
+                passwordHelpMessage = "Passwords don't match";
             } else {
                 // success
-                removeErrorMsj(pConfirmElem)
+                removeErrorMsj(pConfirmElem);
             }
-
-
         } else {
             // Error
-            setErrorMsj(pConfirmElem)
-            passwordHelpMessage = "Password Confirm cannot be blank"
-
+            setErrorMsj(pConfirmElem);
+            passwordHelpMessage = "Password Confirm cannot be blank";
         }
     } else {
         // Error
-        setErrorMsj(pConfirmElem)
-        passwordHelpMessage = "Your password is invalid"
+        setErrorMsj(pConfirmElem);
+        passwordHelpMessage = "Your password is invalid";
     }
     let passHelpMsjElem = document.getElementById("passwordConfirmHelpMsj");
-    passHelpMsjElem?.setAttribute("data-error", passwordHelpMessage)
+    passHelpMsjElem?.setAttribute("data-error", passwordHelpMessage);
 
-    validateForm();
+    // validateForm();
 }
 
 function validateForm() {
@@ -150,7 +183,12 @@ function validateForm() {
     let confirmElem = document.getElementById("passwordConfirm");
     let passwordElem = document.getElementById("password");
     let validInformation = false;
-    if (usernameElem.value && emailElem.classList.contains("valid") && passwordElem.classList.contains("valid") && confirmElem.classList.contains("valid")) {
+    if (
+        usernameElem.value &&
+        emailElem.classList.contains("valid") &&
+        passwordElem.classList.contains("valid") &&
+        confirmElem.classList.contains("valid")
+    ) {
         validInformation = true;
     }
 
@@ -171,20 +209,20 @@ function formSubmitValidation() {
     let passwordElem = document.getElementById("password");
     let sendForm = true;
     if (!passwordElem.classList.contains("valid")) {
-        sendForm = false
+        sendForm = false;
     } else if (!confirmElem.classList.contains("valid")) {
-        sendForm = false
+        sendForm = false;
     }
 
-    let modalElem = document.getElementById("modal1")
+    let modalElem = document.getElementById("modal1");
     let modalMsj = document.getElementById("modalMsj");
 
     if (!sendForm) {
-        modalMsj.innerHTML = "<p style='color:red;'>Data invalid, not sent!<p>"
-        modalElem.M_Modal.open()
+        modalMsj.innerHTML = "<p style='color:red;'>Data invalid, not sent!<p>";
+        modalElem.M_Modal.open();
     } else {
-        modalMsj.innerHTML = "<p style='color:green;'>Successfully submitted!<p>"
-        modalElem.M_Modal.open()
+        modalMsj.innerHTML = "<p style='color:green;'>Successfully submitted!<p>";
+        modalElem.M_Modal.open();
     }
 
     return sendForm;

@@ -5,8 +5,10 @@
 .container {
     padding-right: 15px;
     padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #form {
@@ -14,7 +16,7 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
     gap: 2rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
@@ -25,11 +27,32 @@
     }
 
     .form-button {
-        display: flex;
-        background-color: coral;
-        justify-content: center;
-        margin: 0px 40px;
+        height: 5vh;
+        border-radius: 4px;
     }
+
+    .form-button:not([disabled]) {
+        background-color: coral;
+        color: white;
+        border: none;
+    }
+}
+
+.helper-text {
+    font-size: 16px;
+}
+
+.helper-text[data-error="true"] {
+    color: red;
+}
+
+.helper-text[data-error="false"] {
+    display: none;
+}
+
+.info-text {
+    font-size: 14px;
+    margin-top: 0.7rem;
 }
 
 #form input:not([type="checkbox"]) {
@@ -38,48 +61,36 @@
     padding-right: 30px;
 }
 
-.field-container {
+#form input {
+    margin-top: 6px;
+}
+
+.input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
     position: relative;
     padding: 0px 40px;
 
     .check-icon {
         position: absolute;
         right: 0px;
-        padding: 30px 12px;
+        padding: 30px 50px;
         pointer-events: none;
         color: green;
         display: none;
     }
 }
 
-.right-inner-addon input {
-    padding-right: 35px !important;
+.input-group input:not([type="checkbox"]) {
+    border-radius: 2px;
+    border: 1px #8e8e8e solid;
 }
 
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 12px 12px;
-    pointer-events: none;
+.input-group:last-child {
+    margin-bottom: 40px;
 }
 
-@media (min-width: 768px) {
-    .container {
-        width: 750px;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        width: 970px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        width: 1170px;
-    }
+.show-password-text {
+    font-weight: bold;
+    color: coral;
 }

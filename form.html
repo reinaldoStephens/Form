@@ -1,75 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Form - Practice</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Form - Practice</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <body>
+        <div class="container">
+            <form id="form" action="javascript:void(0);">
+                <div class="form-header">
+                    <p>Form Create User</p>
+                </div>
 
-<body>
-    <div class="container">
-        <form id="form" action="javascript:void(0);">
-            <div class="form-header">
-                <p>Form Create User</p>
-            </div>
+                <div class="input-group">
+                    <label for="username">User Name</label>
+                    <input
+                        placeholder="Username"
+                        id="username"
+                        type="text"
+                        class="validate"
+                        maxlength="18"
+                        aria-label="Username input"
+                        required
+                    />
+                    <span class="check-icon">&#10004;</span>
+                    <span id="username-help-text" class="helper-text" data-error="false"></span>
+                </div>
 
-            <div class="field-container">
-                <label for="username">User Name</label>
-                <input placeholder="Username" id="username" type="text" class="validate" maxlength="10" required>
-                <span class="check-icon">&#10004;</span>
-                <span class="helper-text" data-error="Wrong" data-success="Right"></span>
-            </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input
+                        placeholder="example@gmail.com"
+                        id="email"
+                        type="email"
+                        class="validate"
+                        aria-label="Email input"
+                        required
+                    />
+                    <span class="check-icon">&#10004;</span>
+                    <span class="helper-text" data-error="false"></span>
+                </div>
 
-            <div class="field-container">
-                <label for="email">Email</label>
-                <input placeholder="example@gmail.com" id="email" type="email" class="validate" required>
-                <span class="check-icon">&#10004;</span>
-                <span class="helper-text" data-error="Wrong" data-success="Right"></span>
-            </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input
+                        placeholder="Enter Password"
+                        id="password"
+                        type="password"
+                        class="validate"
+                        maxlength="16"
+                        aria-label="Password input"
+                        required
+                    />
+                    <span class="check-icon">&#10004;</span>
+                    <label>
+                        <input type="checkbox" id="showPassword" />
+                        <span class="show-password-text">Show Password</span>
+                    </label>
+                    <span class="info-text">Password should be 8 characters long with a number & a special character</span>
+                    <span id="password-help-text" class="helper-text" data-error="false"></span>
+                </div>
 
-            <div class="field-container">
-                <label for="password">Password</label>
-                <input placeholder="Enter Password" id="password" type="password" class="validate" required>
-                <span class="check-icon">&#10004;</span>
-                <label>
-                    <input type="checkbox" id="showPassword" />
-                    <span>Show</span>
-                </label>
-                <span class="helper-text">Password should be 8 characters long with a number & a special
-                    character</span>
-                <span id="passwordHelpMsj" class="helper-text" data-error="Wrong" data-success="Right"></span>
-            </div>
+                <div class="input-group">
+                    <label for="passwordConfirm">Password Confirm</label>
+                    <input
+                        placeholder="Password Confirm"
+                        id="passwordConfirm"
+                        type="password"
+                        class="validate"
+                        aria-label="Password Confirm input"
+                        required
+                    />
+                    <span class="check-icon">&#10004;</span>
+                    <span class="info-text">Please confirm your password</span>
+                    <span id="passwordConfirmHelpMsj" class="helper-text" data-error="false"></span>
+                </div>
 
-            <div class="field-container">
-                <label for="passwordConfirm">Password Confirm</label>
-                <input placeholder="Password Confirm" id="passwordConfirm" type="password" class="validate" required>
-                <span class="check-icon">&#10004;</span>
-                <span class="helper-text">Please confirm your password</span>
-                <span id="passwordConfirmHelpMsj" class="helper-text" data-error="Wrong" data-success="Right"></span>
-            </div>
+                <div class="input-group">
+                    <button id="submitButtom" type="submit" class="form-button" disabled>Submit</button>
+                </div>
+            </form>
 
-            <div class="field-container">
-                <button id="submitButtom" type="submit" class="btn-large red lighten-1 hoverable"
-                    disabled>Submit</button>
-            </div>
-        </form>
-
-        <!-- Modal Structure -->
-        <div id="modal1" class="modal">
-            <div class="modal-content">
-                <h4 id="modalMsj"></h4>
-            </div>
-            <div class="modal-footer center">
-                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            <!-- Modal Structure -->
+            <div id="modal1" class="modal">
+                <div class="modal-content">
+                    <h4 id="modalMsj"></h4>
+                </div>
+                <div class="modal-footer center">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <script src="index.js"></script>
-</body>
-
+        <script src="index.js"></script>
+    </body>
 </html>
