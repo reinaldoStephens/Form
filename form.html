@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Form - Practice</title>
+        <meta name="description" content="Form practice" />
+        <meta name="theme-color" content="#317EFB" />
         <link rel="stylesheet" href="style.css" />
     </head>
 
@@ -21,12 +23,12 @@
                         placeholder="Username"
                         id="username"
                         type="text"
-                        class="validate"
+                        class=""
                         maxlength="18"
                         aria-label="Username input"
                         required
                     />
-                    <span class="check-icon">&#10004;</span>
+                    <span class="check-icon" aria-label="Valid information Icon">&#10004;</span>
                     <span id="username-help-text" class="helper-text" data-error="false"></span>
                 </div>
 
@@ -41,7 +43,7 @@
                         required
                     />
                     <span class="check-icon">&#10004;</span>
-                    <span class="helper-text" data-error="false"></span>
+                    <span id="email-help-text" class="helper-text" data-error="false"></span>
                 </div>
 
                 <div class="input-group">
@@ -76,21 +78,22 @@
                     />
                     <span class="check-icon">&#10004;</span>
                     <span class="info-text">Please confirm your password</span>
-                    <span id="passwordConfirmHelpMsj" class="helper-text" data-error="false"></span>
+                    <span id="confirm-help-text" class="helper-text" data-error="false"></span>
                 </div>
 
                 <div class="input-group">
-                    <button id="submitButtom" type="submit" class="form-button" disabled>Submit</button>
+                    <button id="submitButtom" type="submit" class="form-button tooltip" disabled>
+                        Submit
+                        <span class="tooltiptext">Please fix the highlighted fields before submitting</span>
+                    </button>
                 </div>
             </form>
 
             <!-- Modal Structure -->
             <div id="modal1" class="modal">
                 <div class="modal-content">
+                    <span class="close-button">×</span>
                     <h4 id="modalMsj"></h4>
-                </div>
-                <div class="modal-footer center">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
                 </div>
             </div>
         </div>

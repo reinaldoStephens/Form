@@ -11,18 +11,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
     usernameElem?.addEventListener("blur", () => usernameValidation(usernameElem, 6, 18));
     avoidSpaces(usernameElem);
     usernameElem?.addEventListener("blur", validateForm);
+    // email
+    const emailElem = document.getElementById("email");
+    emailElem?.addEventListener("blur", () => emailValidation(emailElem));
+    avoidSpaces(emailElem);
+
     // password
     const passwordElem = document.getElementById("password");
     passwordElem?.addEventListener("blur", () => passwordValidation(passwordElem, 8, 16));
     avoidSpaces(passwordElem);
+
     // password confirmation
     const passwordConfirmElem = document.getElementById("passwordConfirm");
-    passwordConfirmElem?.addEventListener("blur", passwordConfirmValidation);
-    const formElem = document.getElementById("testForm");
-    formElem?.addEventListener("submit", formSubmitValidation);
+    passwordConfirmElem?.addEventListener("blur", () => passwordConfirmValidation());
 
-    const emailElem = document.getElementById("email");
-    emailElem?.addEventListener("blur", validateForm);
+    const formElem = document.getElementById("form");
+    formElem?.addEventListener("submit", () => formSubmitValidation());
 });
 
 function avoidSpaces(pInputElem) {
@@ -41,27 +45,6 @@ function passwordValidationRegex(inputTextVal) {
     }
 }
 
-function setErrorMsj(pElem) {
-    addInvalidClass(pElem);
-    removeValidClass(pElem);
-}
-
-function addValidClass(pElem) {
-    if (!pElem.classList.contains("valid")) pElem.classList.add("valid");
-}
-
-function removeValidClass(pElem) {
-    if (pElem.classList.contains("valid")) pElem.classList.remove("valid");
-}
-
-function addInvalidClass(pElem) {
-    if (!pElem.classList.contains("invalid")) pElem.classList.add("invalid");
-}
-
-function removeInvalidClass(pElem) {
-    if (pElem.classList.contains("invalid")) pElem.classList.remove("invalid");
-}
-
 function inputFieldLengthValidation(pElem, pInputName, pMinNumberofChars, pMaxNumberofChars) {
     let inputValue = pElem.value;
     let helpMessage = "";
@@ -77,22 +60,32 @@ function inputFieldLengthValidation(pElem, pInputName, pMinNumberofChars, pMaxNu
 
 function removeErrorMsj(pHelpMsjElem) {
     pHelpMsjElem?.setAttribute("data-error", "false");
-    let icon = pHelpMsjElem.parentElement.querySelector(".check-icon");
+    let parentElem = pHelpMsjElem.parentElement;
+    let icon = parentElem.querySelector(".check-icon");
     if (icon) {
         icon.style.display = "flex";
     }
+
+    let inputElem = parentElem.querySelector("input");
+    inputElem?.classList.add("valid");
+    inputElem?.classList.remove("invalid");
 }
 
 function setHelpMessage(pHelpMessage, pHelpMsjElem) {
     if (pHelpMessage) {
         if (pHelpMsjElem) {
+            let parentElem = pHelpMsjElem.parentElement;
             pHelpMsjElem.setAttribute("data-error", "true");
             pHelpMsjElem.innerHTML = pHelpMessage;
 
-            let icon = pHelpMsjElem.parentElement.querySelector(".check-icon");
+            let icon = parentElem.querySelector(".check-icon");
             if (icon) {
                 icon.style.display = "none";
             }
+
+            let inputElem = parentElem.querySelector("input");
+            inputElem?.classList.add("invalid");
+            inputElem?.classList.remove("valid");
         }
     }
 }
@@ -113,8 +106,29 @@ function usernameValidation(pElem, pMinNumberofChars, pMaxNumberofChars) {
     }
 
     setHelpMessage(helpMessage, helpMsjElem);
+    validateForm();
+}
 
-    //validateForm();
+function emailValidation(pElem) {
+    let inputValue = pElem.value;
+    let helpMessage = "";
+    let helpMsjElem = document.getElementById("email-help-text");
+
+    if (inputValue) {
+        let expReg =
+            /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+        if (inputValue.match(expReg)) {
+            removeErrorMsj(helpMsjElem);
+        } else {
+            helpMessage = "Invalid email address!";
+        }
+    } else {
+        // Error
+        helpMessage = "Email cannot be blank";
+    }
+
+    setHelpMessage(helpMessage, helpMsjElem);
+    validateForm();
 }
 
 function passwordValidation(pElem, pMinNumberofChars, pMaxNumberofChars) {
@@ -141,25 +155,23 @@ function passwordValidation(pElem, pMinNumberofChars, pMaxNumberofChars) {
     }
 
     setHelpMessage(passwordHelpMessage, helpMsjElem);
-
-    //validateForm();
+    validateForm();
 }
 
 function passwordConfirmValidation() {
     let pConfirmElem = document.getElementById("passwordConfirm");
     let passwordElem = document.getElementById("password");
+    let helpMsjElem = document.getElementById("confirm-help-text");
     let passwordHelpMessage = "";
     let passwordConfirmValue = pConfirmElem.value;
 
     if (passwordElem.classList.contains("valid")) {
         if (passwordConfirmValue) {
             if (passwordElem.value != passwordConfirmValue) {
-                // Error
-                setErrorMsj(pConfirmElem);
                 passwordHelpMessage = "Passwords don't match";
             } else {
                 // success
-                removeErrorMsj(pConfirmElem);
+                removeErrorMsj(helpMsjElem);
             }
         } else {
             // Error
@@ -168,13 +180,13 @@ function passwordConfirmValidation() {
         }
     } else {
         // Error
-        setErrorMsj(pConfirmElem);
         passwordHelpMessage = "Your password is invalid";
     }
     let passHelpMsjElem = document.getElementById("passwordConfirmHelpMsj");
     passHelpMsjElem?.setAttribute("data-error", passwordHelpMessage);
 
-    // validateForm();
+    setHelpMessage(passwordHelpMessage, helpMsjElem);
+    validateForm();
 }
 
 function validateForm() {
@@ -184,7 +196,7 @@ function validateForm() {
     let passwordElem = document.getElementById("password");
     let validInformation = false;
     if (
-        usernameElem.value &&
+        usernameElem.classList.contains("valid") &&
         emailElem.classList.contains("valid") &&
         passwordElem.classList.contains("valid") &&
         confirmElem.classList.contains("valid")
@@ -205,24 +217,20 @@ function validateForm() {
 }
 
 function formSubmitValidation() {
-    let confirmElem = document.getElementById("passwordConfirm");
-    let passwordElem = document.getElementById("password");
-    let sendForm = true;
-    if (!passwordElem.classList.contains("valid")) {
-        sendForm = false;
-    } else if (!confirmElem.classList.contains("valid")) {
-        sendForm = false;
-    }
-
-    let modalElem = document.getElementById("modal1");
+    let submitButtonElem = document.getElementById("submitButtom");
+    let sendForm = submitButtonElem.disabled ? false : true;
     let modalMsj = document.getElementById("modalMsj");
+
+    var modal = document.querySelector(".modal");
+    modal.classList.add("show-modal");
+
+    var closeButton = document.querySelector(".close-button");
+    closeButton.addEventListener("click", () => modal.classList.remove("show-modal"));
 
     if (!sendForm) {
         modalMsj.innerHTML = "<p style='color:red;'>Data invalid, not sent!<p>";
-        modalElem.M_Modal.open();
     } else {
         modalMsj.innerHTML = "<p style='color:green;'>Successfully submitted!<p>";
-        modalElem.M_Modal.open();
     }
 
     return sendForm;
